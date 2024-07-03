@@ -1,6 +1,9 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     kotlin("jvm")
     id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.29.0"
 }
 
 repositories {
@@ -23,13 +26,31 @@ sourceSets.main {
     java.srcDirs("src/main/kotlin")
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "com.philo"
-            artifactId = "jsnamedargs-compiler"
-
-            from(components["java"])
+mavenPublishing {
+    coordinates("com.philo", "jsnamedargs-compiler", "0.0.3")
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
+    signAllPublications()
+    pom {
+        name.set(project.name)
+        description.set("Philo's KMP plugin to generate JS style functions and classes")
+        url.set("https://github.com/PhiloInc/JsNamedArgs")
+        inceptionYear.set("2024")
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://github.com/PhiloInc/JsNamedArgs/blob/main/LICENSE.txt")
+                distribution.set("repo")
+            }
+        }
+        scm {
+            connection.set("scm:git:https://github.com/PhiloInc/JsNamedArgs.git")
+            developerConnection.set("scm:git:ssh://git@github.com:PhiloInc/JsNamedArgs.git")
+            url.set("https://github.com/PhiloInc/JsNamedArgs")
+        }
+        developers {
+            developer {
+                name.set("Philo, Inc.")
+            }
         }
     }
 }
