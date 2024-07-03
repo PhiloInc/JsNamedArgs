@@ -1,0 +1,38 @@
+name: build
+
+on:
+  pull_request: {}
+  workflow_dispatch: {}
+  push:
+    branches:
+      - 'main'
+    tags-ignore:
+      - '**'
+
+env:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dkotlin.incremental=false"
+
+jobs:
+  build:
+    runs-on: macos-latest
+    if: ${{ github.ref == 'refs/heads/main' && github.repository == 'PhiloInc/JsNamedArgs' }}
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+
+      - name: "Configure JDK"
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 19
+
+      - name: "Setup Gradle"
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: "Build and Publish"
+        run: ./gradlew clean publish --stacktrace
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ARTIFACT_SIGNING_PRIVATE_KEY }}
