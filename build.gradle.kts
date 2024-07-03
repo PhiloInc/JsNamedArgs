@@ -18,7 +18,7 @@ plugins {
 
 allprojects {
     group = "com.philo"
-    version = "0.0.1"
+    version = "0.0.2-SNAPSHOT"
 
     repositories {
         mavenLocal()
@@ -31,7 +31,7 @@ allprojects {
 subprojects {
     plugins.withId("com.vanniktech.maven.publish.base") {
         configure<MavenPublishBaseExtension> {
-            publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
+            publishToMavenCentral(SonatypeHost.DEFAULT, automaticRelease = true)
             signAllPublications()
             pom {
                 name.set(project.name)
