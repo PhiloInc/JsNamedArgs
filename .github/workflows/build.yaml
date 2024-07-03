@@ -3,7 +3,7 @@ name: build
 on:
   push:
     branches:
-      - 'casey/add-ci/2024-07-03'
+      - 'main'
     tags-ignore:
       - '**'
 
@@ -13,7 +13,7 @@ env:
 jobs:
   build:
     runs-on: macos-latest
-    if: ${{ github.ref == 'refs/heads/casey/add-ci/2024-07-03' && github.repository == 'PhiloInc/JsNamedArgs' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.repository == 'PhiloInc/JsNamedArgs' }}
 
     steps:
       - name: "Checkout"
