@@ -10,11 +10,12 @@ buildscript {
 
 plugins {
     id("maven-publish")
+    id("com.vanniktech.maven.publish") version "0.29.0"
 }
 
 allprojects {
     group = "com.philo"
-    version = "0.0.0"
+    version = "0.1.0"
 
     repositories {
         mavenLocal()
