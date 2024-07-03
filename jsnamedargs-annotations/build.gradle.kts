@@ -36,7 +36,6 @@ kotlin {
 }
 
 mavenPublishing {
-    coordinates("com.philo", "jsnamedargs-annotations", "0.0.3")
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     signAllPublications()
     pom {
