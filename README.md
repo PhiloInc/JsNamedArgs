@@ -106,7 +106,7 @@ const data = createMyCoolDataWrapper({
 })
 ```
 #### Public Class Methods
-When used on top level class that have public methods, new `Wrapper` functions are created for use in JS as well. They vary slightly from top level functions with their use in JS.
+When used on top level class that have public methods, new `<Class-Name>Wrapper` functions are created for use in JS as well. They vary slightly from top level functions with their use in JS.
 ```kotlin
 @JsNamedArgs
 @JsExport
@@ -122,7 +122,7 @@ const data = createMyCoolDataWrapper({
 })
 
 // Now use member wrapper with object, and then the function arguments
-updateInfoWrapper(data, {
+updateInfoMyCoolDataWrapper(data, {
     id: 10,
     name: "Erin Hannon"
 })
