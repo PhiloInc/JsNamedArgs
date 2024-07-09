@@ -8,6 +8,7 @@ import com.google.devtools.ksp.processing.CodeGenerator
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.FunctionKind
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSTypeParameter
 import com.google.devtools.ksp.symbol.KSVisitorVoid
@@ -65,7 +66,8 @@ class JsNamedArgsVisitor(
             processConstructorFunction(
                 it,
                 classDeclaration.typeParameters,
-                if (isInnerClass) classDeclaration.toClassName().enclosingClassName() else null
+                if (isInnerClass) classDeclaration.toClassName().enclosingClassName() else null,
+                classDeclaration.parentDeclaration
             )
         }
 
@@ -95,15 +97,32 @@ class JsNamedArgsVisitor(
     private fun processConstructorFunction(
         function: KSFunctionDeclaration,
         classTypeParameters: List<KSTypeParameter>,
-        outerParentClassTypeName: TypeName? = null
+        outerParentClassTypeName: TypeName?,
+        parentDeclaration: KSDeclaration?,
     ) {
         if (!function.isConstructor()) return
 
         val constructorOf = function.returnType?.toTypeName(classTypeParameters.toTypeParameterResolver()) ?: return
         val constructorOfBaseName = constructorOf.toBaseTypeName()
 
-        val interfaceName = "${constructorOfBaseName}ConstructorArgs"
-        val functionWithInterfaceName = "create${constructorOfBaseName}Wrapper"
+        val parentDeclarationNames = mutableListOf<String>()
+        fun toParentDeclarationName(declaration: KSDeclaration?) {
+            if (declaration == null) return
+
+            declaration.qualifiedName?.getShortName()?.let {
+                parentDeclarationNames.add(0, it)
+            }
+
+            toParentDeclarationName(declaration.parentDeclaration)
+        }
+
+        toParentDeclarationName(parentDeclaration)
+
+        val interfaceName = parentDeclarationNames.joinToString("") +
+                "${constructorOfBaseName}ConstructorArgs"
+        val functionWithInterfaceName = "create" +
+                parentDeclarationNames.joinToString("") +
+                "${constructorOfBaseName}Wrapper"
 
         processFunction(
             interfaceName,
