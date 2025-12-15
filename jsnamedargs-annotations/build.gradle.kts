@@ -37,7 +37,9 @@ kotlin {
 
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
-    signAllPublications()
+    if (!project.hasProperty("skipSigning")) {
+        signAllPublications()
+    }
     pom {
         name.set(project.name)
         description.set("Philo's KMP plugin to generate JS style functions and classes")
