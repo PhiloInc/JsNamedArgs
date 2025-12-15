@@ -156,7 +156,8 @@ class JsNamedArgsVisitor(
         receiver: TypeName?,
         function: KSFunctionDeclaration,
         typeParameters: List<KSTypeParameter>,
-        outerParentClassTypeName: TypeName? = null
+        outerParentClassTypeName: TypeName? = null,
+        originatingFile: com.google.devtools.ksp.symbol.KSFile? = function.containingFile
     ) {
         val packageName = function.packageName.asString()
         val parameters = function.parameters
@@ -226,7 +227,7 @@ class JsNamedArgsVisitor(
                 addAnnotation(SuppressDeprecationAnnotation)
             }.build()
 
-            fileSpec.writeTo(codeGenerator, false)
+            fileSpec.writeTo(codeGenerator, false, listOfNotNull(originatingFile))
         }
     }
 }

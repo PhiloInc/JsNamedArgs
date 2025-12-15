@@ -177,3 +177,13 @@ The most up to date dependencies can always be found in the module `build.gradle
 The main dependencies for this project include:
 - [KSP](https://github.com/google/ksp/tree/main) - [Apache 2.0](https://github.com/google/ksp/blob/main/LICENSE)
 - [KotlinPoet](https://github.com/square/kotlinpoet) - [Apache 2.0](https://github.com/square/kotlinpoet/blob/main/LICENSE.txt)
+
+## Building Locally
+To build and publish the library to your local Maven repository, run:
+```bash
+./gradlew -PskipSigning publishToMavenLocal
+```
+
+The `-PskipSigning` flag skips GPG signing, which is only required for publishing to Maven Central.
+
+The version published will be the one defined in the root `build.gradle.kts` file (currently set in `allprojects { version = "..." }`).
